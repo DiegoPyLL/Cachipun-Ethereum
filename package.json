@@ -1,0 +1,26 @@
+{
+  "name": "cachipun-on-chain",
+  "version": "1.0.0",
+  "description": "Cachipún (piedra, papel o tijera) al mejor de tres con apuestas en Ether usando commit-reveal",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "gas": "cross-env REPORT_GAS=true hardhat test",
+    "coverage": "hardhat coverage",
+    "nodo": "hardhat node",
+    "desplegar:local": "hardhat run scripts/desplegar.js --network localhost",
+    "dapp": "http-server dapp -p 8080 -c-1"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^6.1.2",
+    "cross-env": "^10.1.0",
+    "ethers": "^6.17.0",
+    "hardhat": "^2.29.1",
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.6.1"
+  }
+}
