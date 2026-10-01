@@ -12,25 +12,31 @@ Contrato inteligente en Solidity que permite a dos jugadores jugar **cachipún (
 sequenceDiagram
     autonumber
     actor J1 as Jugador 1
+    participant C as Contrato
     actor J2 as Jugador 2
-    participant C as Contrato Cachipún
 
-    Note over J1,C: FASE 1 — COMMIT (apuesta + hash)
-    J1->>C: commit(hash1) + apuesta en ETH
-    C-->>C: guarda hash1, monto, inicia plazo de commit
-    J2->>C: commit(hash2) + misma apuesta en ETH
-    C-->>C: guarda hash2, inicia plazo de revelación
+    rect rgba(100, 150, 255, 0.12)
+    Note over J1,J2: FASE 1 — COMMIT (apuesta + hash)
+    J1->>C: commit(hash1) + ETH
+    Note right of C: guarda hash1 y monto<br/>inicia plazo de commit
+    J2->>C: commit(hash2) + mismo ETH
+    Note left of C: guarda hash2<br/>inicia plazo de reveal
+    end
 
-    Note over J1,C: FASE 2 — REVEAL (dentro del plazo)
+    rect rgba(255, 200, 80, 0.12)
+    Note over J1,J2: FASE 2 — REVEAL (dentro del plazo)
     J1->>C: reveal(jugada1, secreto1)
-    C-->>C: verifica keccak256(jugada1, secreto1, J1) == hash1
+    Note right of C: verifica keccak256<br/>(jugada1, secreto1, J1) == hash1
     J2->>C: reveal(jugada2, secreto2)
-    C-->>C: verifica keccak256(jugada2, secreto2, J2) == hash2
+    Note left of C: verifica keccak256<br/>(jugada2, secreto2, J2) == hash2
+    end
 
-    Note over J1,C: FASE 3 — RESOLUCIÓN AUTOMÁTICA
-    C-->>C: determina ganador
-    C->>J1: transfiere pozo (si gana) / mitad (si empate)
-    C->>J2: transfiere pozo (si gana) / mitad (si empate)
+    rect rgba(80, 200, 120, 0.12)
+    Note over J1,J2: FASE 3 — RESOLUCIÓN AUTOMÁTICA
+    Note over C: determina ganador
+    C->>J1: pozo (si gana) / mitad (empate)
+    C->>J2: pozo (si gana) / mitad (empate)
+    end
 ```
 
 ### Paso a paso
@@ -58,15 +64,24 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
+    direction LR
     [*] --> EsperandoJugadores
     EsperandoJugadores --> EsperandoJugadores: commit J1
     EsperandoJugadores --> Revelando: commit J2
-    EsperandoJugadores --> Cancelado: timeout commit (reembolso J1)
-    Revelando --> Finalizado: ambos revelan → ganador/empate
-    Revelando --> Finalizado: timeout, solo uno reveló → gana el que reveló
-    Revelando --> Cancelado: timeout, nadie reveló → reembolso
+    EsperandoJugadores --> Cancelado: timeout commit
+    Revelando --> Finalizado: ambos revelan
+    Revelando --> Finalizado: timeout (1 reveló)
+    Revelando --> Cancelado: timeout (nadie reveló)
     Finalizado --> [*]
     Cancelado --> [*]
+
+    note right of Finalizado
+        Ganador se lleva el pozo
+        o empate: reembolso a cada uno
+    end note
+    note right of Cancelado
+        Reembolso de las apuestas
+    end note
 ```
 
 ### Lógica del ganador
