@@ -186,25 +186,21 @@ Cada fila tiene un test en [test/Cachipun.test.js](test/Cachipun.test.js). Para 
 
 ---
 
-## 4. Despliegue y uso (Remix + MetaMask + Sepolia)
+## 4. Despliegue y uso en Sepolia
 
-1. Abrir [Remix IDE](https://remix.ethereum.org) y crear `Cachipun.sol` con el contenido de [contracts/Cachipun.sol](contracts/Cachipun.sol). El import de OpenZeppelin se resuelve solo.
-2. Compilar con Solidity `0.8.24` o superior (probado con `0.8.28`).
-3. En *Deploy & Run*, seleccionar **Injected Provider – MetaMask** (red **Sepolia**, con ETH de faucet).
-4. Completar los parámetros del constructor en segundos: `_duracionCommit` y `_duracionReveal`. Por ejemplo, `300` y `300` dan 5 minutos por fase. Con plazos cortos es fácil mostrar un timeout en la demo.
-5. Desplegar y copiar la dirección del contrato.
-6. **Jugar con la DApp:**
-   1. Correr `npm run dapp` y abrir `http://localhost:8080/?red=sepolia&contrato=0x…`.
-   2. **J1:** conectar MetaMask, elegir la jugada y la apuesta, y presionar *Apostar y enviar commit*.
-   3. **J2:** con otra cuenta de MetaMask (otro perfil del navegador), abrir el mismo link e igualar la apuesta.
-   4. Cada jugador revela con *Revelar jugada*. Las rondas siguientes se juegan igual, pero sin ETH.
-7. **Alternativa: jugar solo desde Remix**
-   - **Generar un secreto de 32 bytes**, por ejemplo con `node -e "console.log('0x'+require('crypto').randomBytes(32).toString('hex'))"`.
-   - **Calcular el hash:** llamar `generarHash(jugada, secreto, tuDireccion)`. Es una consulta y no gasta gas, pero el secreto pasa por el nodo RPC de MetaMask.
-   - **Commit:** `commit(hash)` con *Value* = apuesta en la ronda 1, y 0 en las rondas siguientes.
-   - **Reveal:** `reveal(jugada, secreto)`.
-   - **Según el caso:** `reclamarTimeout()`, `nuevaPartida()` o `retirar()`.
-8. Verificar las transacciones, los eventos (pestaña *Events*) y las transferencias en [Sepolia Etherscan](https://sepolia.etherscan.io). Conviene verificar el código fuente en Etherscan (plugin *Contract Verification* de Remix), para que cualquiera pueda leer el contrato que custodia el pozo.
+La guía paso a paso está en **[DESPLIEGUE.md](DESPLIEGUE.md)**. Incluye los requisitos, cómo preparar MetaMask y conseguir ETH de Sepolia, el despliegue con el script o con Remix, cómo jugar con la DApp, las capturas para el informe y la solución de problemas.
+
+Resumen con el script ([scripts/desplegar.js](scripts/desplegar.js)):
+
+```bash
+npm install
+npx hardhat vars set SEPOLIA_PRIVATE_KEY   # llave de una cuenta SOLO de pruebas, con ETH de Sepolia
+npx hardhat vars set ETHERSCAN_API_KEY     # opcional: publica el código fuente en Etherscan
+npm run desplegar:sepolia                  # revisa el saldo, despliega y guarda despliegues/sepolia.json
+npm run dapp                               # abrir http://localhost:8080/?red=sepolia&contrato=0x…
+```
+
+`vars` guarda la llave fuera del repositorio, pero en texto plano: usa una cuenta que solo tenga ETH de prueba. Si prefieres no exportar la llave privada, también se puede desplegar desde Remix con MetaMask (opción B de la guía).
 
 **Dirección del contrato en Sepolia:** `0x...` *(completar)*
 
@@ -219,12 +215,14 @@ contracts/
 test/
   Cachipun.test.js             tests del contrato: reglas, plazos y ataques
   dapp.test.js                 la DApp y el contrato usan el mismo hash y el mismo ABI
-scripts/desplegar.js           despliegue en el nodo local
+scripts/desplegar.js           despliegue en el nodo local o en Sepolia
+despliegues/sepolia.json       registro del despliegue en Sepolia (lo crea el script)
 dapp/
   index.html · estilos.css     interfaz
   app.js                       lógica de la interfaz: MetaMask, lectura y eventos
   contrato.js                  ABI, hash y redes (compartido con los tests)
-hardhat.config.js
+hardhat.config.js              compilador, red Sepolia y verificación en Etherscan
+DESPLIEGUE.md                  guía de despliegue paso a paso
 ```
 
 Requiere Node.js 20 o superior (probado con 22).
@@ -234,6 +232,7 @@ npm install          # Hardhat 2, OpenZeppelin 5, ethers 6
 npm test             # 58 tests
 npm run gas          # tests + tabla de gas por función y por despliegue
 npm run coverage     # cobertura: 100 % de líneas, funciones y ramas de Cachipun.sol
+npm run desplegar:sepolia   # despliegue en Sepolia (ver sección 4)
 ```
 
 ### Probar la DApp sin gastar ETH de testnet

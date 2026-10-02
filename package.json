@@ -11,6 +11,7 @@
     "coverage": "hardhat coverage",
     "nodo": "hardhat node",
     "desplegar:local": "hardhat run scripts/desplegar.js --network localhost",
+    "desplegar:sepolia": "hardhat run scripts/desplegar.js --network sepolia",
     "dapp": "http-server dapp -p 8080 -c-1"
   },
   "devDependencies": {
