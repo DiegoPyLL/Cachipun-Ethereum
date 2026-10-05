@@ -45,7 +45,7 @@ contract Cachipun is ReentrancyGuard {
 
     uint256 public immutable duracionCommit;   // segundos para hacer commit
     uint256 public immutable duracionReveal;   // segundos para revelar
-    uint256 public immutable bloqueDespliegue; // desde aquí la DApp lee los eventos
+    uint256 public immutable bloqueDespliegue; // desde aquí se buscan los eventos (Etherscan)
 
     uint256 public partida; // número de partida actual (parte en 1)
     uint256 public ronda;   // ronda actual dentro de la partida (parte en 1)
@@ -186,7 +186,7 @@ contract Cachipun is ReentrancyGuard {
     }
 
     /// @notice Calcula el hash que se envía en commit. Es `pure`: no lee ni escribe
-    ///         la blockchain. La DApp calcula el mismo hash en el navegador.
+    ///         la blockchain, así que consultarla desde Remix no gasta gas.
     function generarHash(Jugada _jugada, bytes32 _secreto, address _jugador) public pure returns (bytes32) {
         return keccak256(abi.encodePacked(_jugada, _secreto, _jugador));
     }

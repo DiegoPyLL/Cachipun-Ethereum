@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts\Cachipun.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> Cachipun.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>93/93</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>94/94</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>18/18</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>125/125</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">120×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">119×</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-yes">31×</span>
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-yes">80×</span>
+<span class="cline-any cline-yes">79×</span>
+<span class="cline-any cline-yes">78×</span>
+<span class="cline-any cline-yes">77×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">74×</span>
+<span class="cline-any cline-yes">74×</span>
+<span class="cline-any cline-yes">74×</span>
+<span class="cline-any cline-yes">74×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">74×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">172×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">43×</span>
+<span class="cline-any cline-yes">42×</span>
+<span class="cline-any cline-yes">42×</span>
+<span class="cline-any cline-yes">42×</span>
+<span class="cline-any cline-yes">42×</span>
+<span class="cline-any cline-yes">42×</span>
+<span class="cline-any cline-yes">42×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39×</span>
+<span class="cline-any cline-yes">38×</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-yes">35×</span>
+<span class="cline-any cline-yes">35×</span>
+<span class="cline-any cline-yes">35×</span>
+<span class="cline-any cline-yes">35×</span>
+<span class="cline-any cline-yes">35×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">47×</span>
+<span class="cline-any cline-yes">47×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29×</span>
+<span class="cline-any cline-yes">29×</span>
+<span class="cline-any cline-yes">29×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">21×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26×</span>
+<span class="cline-any cline-yes">26×</span>
+<span class="cline-any cline-yes">26×</span>
+<span class="cline-any cline-yes">26×</span>
+<span class="cline-any cline-yes">26×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">52×</span>
+<span class="cline-any cline-yes">52×</span>
+<span class="cline-any cline-yes">52×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23×</span>
+<span class="cline-any cline-yes">23×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">111×</span>
+<span class="cline-any cline-yes">50×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-yes">87×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+&nbsp;
+/// @title Cachipún On-Chain (al mejor de tres)
+/// @notice Piedra, papel o tijera entre dos jugadores con apuesta en Ether.
+///         Cada ronda usa commit–reveal: primero se publica el hash de la jugada
+///         y solo cuando ambos se comprometieron se revela. Gana la partida quien
+///         gane primero 2 rondas; las rondas empatadas se repiten.
+/// @dev Evaluación Parcial N°2 · BCY0010 Fundamentos de Blockchain · Duoc UC
+contract Cachipun is ReentrancyGuard {
+    // ───────────────────────────── Tipos ─────────────────────────────
+&nbsp;
+    enum Jugada { Ninguna, Piedra, Papel, Tijera }
+&nbsp;
+    enum Estado {
+        EsperandoJugadores, // ronda 1: J1 abre la partida y J2 iguala la apuesta
+        Comprometiendo,     // rondas 2+: ambos envían el hash de su jugada
+        Revelando,          // ambos revelan jugada + secreto
+        Finalizado,         // hubo ganador y se pagó el pozo
+        Cancelado           // partida anulada y se devolvieron las apuestas
+    }
+&nbsp;
+    /// @dev El orden de los campos empaqueta addr, jugada, flags y victorias en
+    ///      un solo slot de 32 bytes: el struct ocupa 3 slots en vez de 4.
+    struct Jugador {
+        address addr;
+        Jugada jugada;
+        bool comprometio;
+        bool revelo;
+        uint8 victorias;
+        bytes32 hash;
+        bytes32 ultimoSecreto; // secreto revelado en la ronda anterior (ya es público)
+    }
+&nbsp;
+    // ───────────────────────────── Estado ─────────────────────────────
+&nbsp;
+    uint8 public constant VICTORIAS_PARA_GANAR = 2;
+&nbsp;
+    /// @dev Gas que se reenvía en los pagos automáticos. Alcanza para una wallet
+    ///      normal o una smart wallet, pero impide que un receptor malicioso
+    ///      consuma todo el gas y bloquee el pago al rival.
+    uint256 private constant GAS_PAGO = 50_000;
+&nbsp;
+    uint256 public immutable duracionCommit;   // segundos para hacer commit
+    uint256 public immutable duracionReveal;   // segundos para revelar
+    uint256 public immutable bloqueDespliegue; // desde aquí la DApp lee los eventos
+&nbsp;
+    uint256 public partida; // número de partida actual (parte en 1)
+    uint256 public ronda;   // ronda actual dentro de la partida (parte en 1)
+&nbsp;
+    // estado, ganador y porAbandono comparten un slot.
+    Estado public estado;
+    address public ganador;  // ganador de la partida (queda hasta nuevaPartida)
+    bool public porAbandono; // true si ganó porque el rival no cumplió un plazo
+&nbsp;
+    Jugador public jugador1;
+    Jugador public jugador2;
+&nbsp;
+    uint256 public apuesta;     // monto que pone cada jugador (lo fija J1)
+    uint256 public plazoCommit; // límite para la fase de commit vigente
+    uint256 public plazoReveal; // límite para la fase de reveal vigente
+&nbsp;
+    /// @notice Pagos que no se pudieron entregar automáticamente (ver retirar).
+    mapping(address =&gt; uint256) public pendientes;
+&nbsp;
+    // ───────────────────────────── Eventos ─────────────────────────────
+&nbsp;
+    event NuevaPartida(uint256 indexed partida);
+    event Commit(uint256 indexed partida, uint256 ronda, address indexed jugador, bytes32 hash, uint256 monto);
+    event Reveal(uint256 indexed partida, uint256 ronda, address indexed jugador, Jugada jugada);
+    event RondaGanada(uint256 indexed partida, uint256 ronda, address indexed ganador, uint8 victorias1, uint8 victorias2);
+    event Empate(uint256 indexed partida, uint256 ronda);
+    event Ganador(uint256 indexed partida, address indexed ganador, uint256 premio, bool porAbandono);
+    event Anulado(uint256 indexed partida, string motivo);
+    event PagoPendiente(address indexed destinatario, uint256 monto);
+    event Retiro(address indexed destinatario, uint256 monto);
+&nbsp;
+    // ─────────────────────────── Constructor ───────────────────────────
+&nbsp;
+    /// @param _duracionCommit Segundos que tiene cada fase de commit (mínimo 60).
+    /// @param _duracionReveal Segundos que tiene cada fase de reveal (mínimo 60).
+    constructor(uint256 _duracionCommit, uint256 _duracionReveal) {
+        require(_duracionCommit &gt;= 1 minutes &amp;&amp; _duracionReveal &gt;= 1 minutes, "Plazo minimo: 1 minuto");
+        duracionCommit = _duracionCommit;
+        duracionReveal = _duracionReveal;
+        bloqueDespliegue = block.number;
+        partida = 1;
+        ronda = 1;
+        emit NuevaPartida(1);
+    }
+&nbsp;
+    // ─────────────────────── Funciones públicas ───────────────────────
+&nbsp;
+    /// @notice Envía el hash de tu jugada. En la ronda 1 se envía junto con la apuesta.
+    /// @param _hash keccak256(abi.encodePacked(jugada, secreto, tuDireccion)); ver generarHash.
+    function commit(bytes32 _hash) external payable nonReentrant {
+        require(_hash != bytes32(0), "Hash vacio");
+&nbsp;
+        if (estado == Estado.EsperandoJugadores) {
+            _registrar(_hash);
+        } else if (estado == Estado.Comprometiendo) {
+            require(block.timestamp &lt;= plazoCommit, "Plazo de commit vencido");
+            require(msg.value == 0, "La apuesta ya fue pagada");
+            Jugador storage j = _jugadorDe(msg.sender);
+            require(!j.comprometio, "Ya hiciste commit en esta ronda");
+            require(!_reusaSecreto(_hash, j.ultimoSecreto, msg.sender), "Usa un secreto nuevo");
+&nbsp;
+            j.hash = _hash;
+            j.comprometio = true;
+            emit Commit(partida, ronda, msg.sender, _hash, 0);
+&nbsp;
+            if (jugador1.comprometio &amp;&amp; jugador2.comprometio) _abrirReveal();
+        } else if (estado == Estado.Revelando) {
+            revert("Ronda en fase de reveal");
+        } else {
+            revert("La partida termino: llama a nuevaPartida()");
+        }
+    }
+&nbsp;
+    /// @notice Revela tu jugada y el secreto que usaste en el commit.
+    ///         Cuando ambos revelaron, el contrato resuelve la ronda solo.
+    function reveal(Jugada _jugada, bytes32 _secreto) external nonReentrant {
+        require(estado == Estado.Revelando, "No es fase de reveal");
+        require(block.timestamp &lt;= plazoReveal, "Plazo de reveal vencido");
+        require(_jugada != Jugada.Ninguna, "Jugada invalida");
+        Jugador storage j = _jugadorDe(msg.sender);
+        require(!j.revelo, "Ya revelaste");
+        require(generarHash(_jugada, _secreto, msg.sender) == j.hash, "No coincide con tu commit");
+&nbsp;
+        j.jugada = _jugada;
+        j.revelo = true;
+        j.ultimoSecreto = _secreto;
+        emit Reveal(partida, ronda, msg.sender, _jugada);
+&nbsp;
+        if (jugador1.revelo &amp;&amp; jugador2.revelo) _resolverRonda();
+    }
+&nbsp;
+    /// @notice Aplica las reglas de plazo vencido. Cualquiera puede llamarla:
+    ///         los fondos siempre van a los jugadores, nunca a quien la llama.
+    function reclamarTimeout() external nonReentrant {
+        if (estado == Estado.EsperandoJugadores) {
+            require(jugador1.addr != address(0), "No hay partida en curso");
+            require(block.timestamp &gt; plazoCommit, "El plazo de commit sigue vigente");
+            _anular("Nadie igualo la apuesta");
+        } else if (estado == Estado.Comprometiendo) {
+            require(block.timestamp &gt; plazoCommit, "El plazo de commit sigue vigente");
+            _resolverAbandono(jugador1.comprometio, jugador2.comprometio, "Nadie hizo commit");
+        } else if (estado == Estado.Revelando) {
+            require(block.timestamp &gt; plazoReveal, "El plazo de reveal sigue vigente");
+            _resolverAbandono(jugador1.revelo, jugador2.revelo, "Nadie revelo");
+        } else {
+            revert("La partida ya termino");
+        }
+    }
+&nbsp;
+    /// @notice Abre una partida nueva. Solo se puede cuando la actual terminó
+    ///         (Finalizado o Cancelado): así el fin de cada partida queda explícito.
+    function nuevaPartida() external nonReentrant {
+        require(
+            estado == Estado.Finalizado || estado == Estado.Cancelado,
+            "La partida actual no ha terminado"
+        );
+        delete jugador1;
+        delete jugador2;
+        delete apuesta;
+        delete plazoCommit;
+        delete plazoReveal;
+        delete ganador;
+        delete porAbandono;
+        estado = Estado.EsperandoJugadores;
+        ronda = 1;
+        partida += 1;
+        emit NuevaPartida(partida);
+    }
+&nbsp;
+    /// @notice Retira un pago que no se pudo entregar automáticamente.
+    function retirar() external nonReentrant {
+        uint256 monto = pendientes[msg.sender];
+        require(monto &gt; 0, "No tienes saldo pendiente");
+        pendientes[msg.sender] = 0;
+        emit Retiro(msg.sender, monto);
+        (bool ok, ) = payable(msg.sender).call{value: monto}("");
+        require(ok, "Transferencia fallida");
+    }
+&nbsp;
+    /// @notice Calcula el hash que se envía en commit. Es `pure`: no lee ni escribe
+    ///         la blockchain. La DApp calcula el mismo hash en el navegador.
+    function generarHash(Jugada _jugada, bytes32 _secreto, address _jugador) public pure returns (bytes32) {
+        return keccak256(abi.encodePacked(_jugada, _secreto, _jugador));
+    }
+&nbsp;
+    // ─────────────────────── Funciones internas ───────────────────────
+&nbsp;
+    /// @dev Ronda 1: el primero en llamar es J1 y fija la apuesta; el segundo es J2.
+    function _registrar(bytes32 _hash) private {
+        if (jugador1.addr == address(0)) {
+            require(msg.value &gt; 0, "Debes apostar ETH");
+            jugador1.addr = msg.sender;
+            jugador1.hash = _hash;
+            jugador1.comprometio = true;
+            apuesta = msg.value;
+            plazoCommit = block.timestamp + duracionCommit;
+            emit Commit(partida, ronda, msg.sender, _hash, msg.value);
+        } else {
+            require(block.timestamp &lt;= plazoCommit, "Plazo de commit vencido");
+            require(msg.sender != jugador1.addr, "Ya estas en la partida");
+            require(msg.value == apuesta, "Debes igualar la apuesta");
+            jugador2.addr = msg.sender;
+            jugador2.hash = _hash;
+            jugador2.comprometio = true;
+            emit Commit(partida, ronda, msg.sender, _hash, msg.value);
+            _abrirReveal();
+        }
+    }
+&nbsp;
+    function _abrirReveal() private {
+        estado = Estado.Revelando;
+        plazoReveal = block.timestamp + duracionReveal;
+    }
+&nbsp;
+    /// @dev Jugadas: 1 = Piedra, 2 = Papel, 3 = Tijera.
+    ///      Gana J1 si (j1 - j2) mod 3 == 1. Se suma 3 antes de restar para no
+    ///      hacer underflow (en Solidity 0.8 una resta negativa revierte).
+    function _resolverRonda() private {
+        uint8 a = uint8(jugador1.jugada);
+        uint8 b = uint8(jugador2.jugada);
+&nbsp;
+        if (a == b) {
+            emit Empate(partida, ronda);
+            _siguienteRonda();
+            return;
+        }
+&nbsp;
+        Jugador storage g = (a + 3 - b) % 3 == 1 ? jugador1 : jugador2;
+        g.victorias += 1;
+        emit RondaGanada(partida, ronda, g.addr, jugador1.victorias, jugador2.victorias);
+&nbsp;
+        if (g.victorias == VICTORIAS_PARA_GANAR) {
+            _terminar(g.addr, false);
+        } else {
+            _siguienteRonda();
+        }
+    }
+&nbsp;
+    function _siguienteRonda() private {
+        ronda += 1;
+        _limpiarRonda(jugador1);
+        _limpiarRonda(jugador2);
+        estado = Estado.Comprometiendo;
+        plazoCommit = block.timestamp + duracionCommit;
+    }
+&nbsp;
+    function _limpiarRonda(Jugador storage _j) private {
+        _j.jugada = Jugada.Ninguna;
+        _j.comprometio = false;
+        _j.revelo = false;
+    }
+&nbsp;
+    /// @dev Se llama con el plazo vencido. Quien no cumplió pierde la partida;
+    ///      si ninguno cumplió, la partida se anula.
+    function _resolverAbandono(bool _cumplio1, bool _cumplio2, string memory _motivo) private {
+        if (_cumplio1 &amp;&amp; !_cumplio2) {
+            _terminar(jugador1.addr, true);
+        } else if (_cumplio2 &amp;&amp; !_cumplio1) {
+            _terminar(jugador2.addr, true);
+        } else {
+            _anular(_motivo);
+        }
+    }
+&nbsp;
+    /// @dev Checks-effects-interactions: primero se registra el resultado y
+    ///      recién al final se transfiere el Ether.
+    function _terminar(address _ganador, bool _porAbandono) private {
+        uint256 premio = apuesta * 2;
+        estado = Estado.Finalizado;
+        ganador = _ganador;
+        porAbandono = _porAbandono;
+        emit Ganador(partida, _ganador, premio, _porAbandono);
+        _pagar(_ganador, premio);
+    }
+&nbsp;
+    function _anular(string memory _motivo) private {
+        address a1 = jugador1.addr;
+        address a2 = jugador2.addr;
+        uint256 monto = apuesta;
+        estado = Estado.Cancelado;
+        emit Anulado(partida, _motivo);
+        _pagar(a1, monto);
+        if (a2 != address(0)) _pagar(a2, monto);
+    }
+&nbsp;
+    /// @dev Pago "push" con respaldo "pull": si el destinatario rechaza el Ether
+    ///      (por ejemplo un contrato sin receive), el monto queda en `pendientes`
+    ///      para que lo retire después, y el pago al rival no se bloquea.
+    function _pagar(address _a, uint256 _monto) private {
+        (bool ok, ) = payable(_a).call{value: _monto, gas: GAS_PAGO}("");
+        if (!ok) {
+            pendientes[_a] += _monto;
+            emit PagoPendiente(_a, _monto);
+        }
+    }
+&nbsp;
+    function _jugadorDe(address _a) private view returns (Jugador storage) {
+        if (_a == jugador1.addr) return jugador1;
+        if (_a == jugador2.addr) return jugador2;
+        revert("No eres jugador de esta partida");
+    }
+&nbsp;
+    /// @dev El secreto de la ronda anterior ya es público: si se reutiliza,
+    ///      cualquiera puede probar las 3 jugadas y descubrir la nueva.
+    ///      Solo se llama desde la ronda 2, cuando ambos ya revelaron un secreto.
+    function _reusaSecreto(bytes32 _hash, bytes32 _secretoAnterior, address _jugador) private pure returns (bool) {
+        for (uint8 m = uint8(Jugada.Piedra); m &lt;= uint8(Jugada.Tijera); m++) {
+            if (generarHash(Jugada(m), _secretoAnterior, _jugador) == _hash) return true;
+        }
+        return false;
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Oct 05 2026 17:28:08 GMT-0300 (hora de verano de Chile)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

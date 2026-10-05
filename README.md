@@ -2,7 +2,7 @@
 
 Evaluación Parcial N°2 · **BCY0010 Fundamentos de Blockchain** · Duoc UC
 
-Contrato inteligente en Solidity que permite a dos jugadores jugar **cachipún (piedra, papel o tijera) al mejor de tres** apostando Ether. Usa el esquema **commit–reveal** para que ninguno pueda ver la jugada del otro antes de comprometerse. Incluye una **DApp web** para jugar con MetaMask y auditar la partida, y **tests automáticos** de todas las reglas.
+Contrato inteligente en Solidity que permite a dos jugadores jugar **cachipún (piedra, papel o tijera) al mejor de tres** apostando Ether. Usa el esquema **commit–reveal** para que ninguno pueda ver la jugada del otro antes de comprometerse. Todo se hace en **[Remix IDE](https://remix.ethereum.org)**, en el navegador: no hay que instalar nada.
 
 ---
 
@@ -46,7 +46,7 @@ sequenceDiagram
 
 | # | Paso | Quién | Qué ocurre en el contrato |
 |---|------|-------|---------------------------|
-| 1 | **Generar hash** (off-chain) | Cada jugador | Se genera un secreto aleatorio de 32 bytes y se calcula `keccak256(abi.encodePacked(jugada, secreto, direccion))`. La DApp lo hace en el navegador: la jugada y el secreto **no** salen del equipo. |
+| 1 | **Generar hash** | Cada jugador | Elige un secreto aleatorio de 32 bytes y calcula `keccak256(abi.encodePacked(jugada, secreto, direccion))` con `generarHash`. Es una consulta: no se guarda en la blockchain ni gasta gas. |
 | 2 | **Abrir partida** | Jugador 1 | Llama `commit(hash)` enviando ETH (`msg.value`). Queda como J1, fija la `apuesta` y empieza el plazo de commit. |
 | 3 | **Unirse** | Jugador 2 | Llama `commit(hash)` con **exactamente** la misma apuesta. Empieza el plazo de revelación. |
 | 4 | **Reveal** | Ambos | Llaman `reveal(jugada, secreto)`. El contrato recalcula el hash y lo compara con el guardado; si no coincide, la transacción se revierte. |
@@ -132,13 +132,13 @@ Código: [contracts/Cachipun.sol](contracts/Cachipun.sol)
 | `duracionCommit`, `duracionReveal` | Segundos de cada fase. Se fijan en el constructor (mínimo 60) |
 | `ganador`, `porAbandono` | Resultado de la última partida. Se mantienen hasta `nuevaPartida()` |
 | `pendientes[address]` | Pagos que no se pudieron entregar automáticamente |
-| `bloqueDespliegue` | Bloque desde el cual la DApp lee los eventos |
+| `bloqueDespliegue` | Bloque del despliegue: desde ahí se buscan los eventos en Etherscan |
 | `commit(bytes32 hash) payable` | Ronda 1: registra a J1 o J2 con la apuesta. Rondas 2+: guarda solo el hash, sin ETH |
 | `reveal(Jugada jugada, bytes32 secreto)` | Verifica el hash, guarda la jugada y resuelve la ronda cuando ambos revelaron |
 | `reclamarTimeout()` | Aplica abandono o anulación cuando vence un plazo |
 | `nuevaPartida()` | Abre la siguiente partida (solo si la actual terminó) |
 | `retirar()` | Cobra un saldo de `pendientes` |
-| `generarHash(jugada, secreto, jugador)` `pure` | Calcula el hash del commit (el mismo que calcula la DApp) |
+| `generarHash(jugada, secreto, jugador)` `pure` | Calcula el hash del commit. Consultarla no gasta gas |
 | `_resolverRonda()`, `_terminar()`, `_anular()`, `_pagar()` (internas) | Ganador de la ronda, cierre de la partida y transferencias de ETH |
 | Eventos | `NuevaPartida`, `Commit`, `Reveal`, `RondaGanada`, `Empate`, `Ganador`, `Anulado`, `PagoPendiente` y `Retiro`. Llevan el número de partida (y de ronda) para la trazabilidad en Etherscan |
 
@@ -158,7 +158,7 @@ Código: [contracts/Cachipun.sol](contracts/Cachipun.sol)
 | Un jugador ve la jugada del otro y responde | Commit–reveal: hasta que ambos se comprometen solo se publica el hash |
 | Ataque de fuerza bruta al hash (solo 3 jugadas posibles) | Se agrega un **secreto aleatorio de 32 bytes** al hash |
 | Copiar el hash del rival (front-running) | La **dirección del jugador** se incluye en el hash, así que un hash copiado no se puede revelar |
-| Reutilizar en la ronda siguiente el secreto, que ya es público | El contrato rechaza ese commit (*"Usa un secreto nuevo"*) y la DApp genera un secreto nuevo en cada ronda |
+| Reutilizar en la ronda siguiente el secreto, que ya es público | El contrato rechaza ese commit (*"Usa un secreto nuevo"*) |
 | No revelar (o no hacer commit) para evitar perder | Quien no cumple dentro del plazo **pierde la partida** |
 | Bloquear fondos indefinidamente | Plazos de commit y reveal, más `reclamarTimeout()`, que puede llamar cualquiera |
 | Reentrancy al transferir | Patrón *checks-effects-interactions* y `nonReentrant` (`ReentrancyGuard` de OpenZeppelin) en **todas** las funciones que escriben, incluida `nuevaPartida`. Así se evita también la reentrada cruzada entre funciones |
@@ -166,95 +166,50 @@ Código: [contracts/Cachipun.sol](contracts/Cachipun.sol)
 | Manipulación de `block.timestamp` por los validadores | Los plazos son de minutos (mínimo 60 s) y la variación posible es de segundos |
 | Apuestas desiguales | J2 debe enviar exactamente `apuesta`; en las rondas 2+ `msg.value` debe ser 0 |
 | Terceros interfiriendo | En las rondas 2+, `commit` y `reveal` solo aceptan a las 2 direcciones registradas |
-| Filtrar el secreto a un nodo RPC al calcular el hash | La DApp calcula el hash localmente; `generarHash` es solo una ayuda para usar desde Remix |
+| Filtrar el secreto al calcular el hash | En Sepolia, consultar `generarHash` envía el secreto al nodo RPC antes del reveal. Por eso el hash se calcula en **Remix VM**, que corre dentro del navegador: `generarHash` es `pure` y da el mismo resultado sin conectarse a ninguna red |
 | ETH enviado por error al contrato | No hay `receive` ni `fallback`, así que la transacción revierte |
 
-Cada fila tiene un test en [test/Cachipun.test.js](test/Cachipun.test.js). Para los ataques se usa un jugador-contrato malicioso ([contracts/mocks/JugadorMalicioso.sol](contracts/mocks/JugadorMalicioso.sol)) que rechaza el ETH, consume todo el gas o intenta reentrar por las 5 funciones que escriben.
+Las reglas se pueden comprobar a mano en Remix VM: cambiar la jugada, apostar distinto, repetir el secreto, jugar con una tercera cuenta y los timeouts (ver [DESPLIEGUE.md](DESPLIEGUE.md), paso 4).
 
 **Riesgos residuales:**
 
 - **Las jugadas y los secretos quedan públicos para siempre** una vez revelados. Es intencional, porque permite la auditoría.
-- **El secreto vive en el navegador:** si se borran los datos del navegador antes de revelar, el jugador no puede revelar y pierde. Por eso la DApp ofrece *"Copiar respaldo"*.
-- **Reutilizar un secreto entre partidas distintas** no lo detecta el contrato, que solo compara con la ronda anterior. La DApp siempre genera uno nuevo.
+- **El secreto lo guarda cada jugador:** si lo pierde antes de revelar, no puede revelar y pierde la partida. Hay que anotarlo apenas se genera.
+- **Reutilizar un secreto entre partidas distintas** no lo detecta el contrato, que solo compara con la ronda anterior. Hay que generar un secreto nuevo para cada ronda.
 - **Cerrar una partida abandonada cuesta gas:** alguien debe llamar `reclamarTimeout()`. El incentivo lo tiene quien cumplió, porque cobra el pozo.
 
 **Llaves y wallets:**
 
-- **Firma:** cada transacción se firma con la llave privada del jugador en MetaMask (ECDSA sobre secp256k1). La red verifica la firma y el contrato obtiene la identidad vía `msg.sender`, la dirección derivada de la llave pública.
+- **Firma:** cada transacción se firma con la llave privada del jugador (ECDSA sobre secp256k1). En Sepolia la firma MetaMask; en Remix VM, las cuentas de prueba del simulador. La red verifica la firma y el contrato obtiene la identidad vía `msg.sender`, la dirección derivada de la llave pública.
 - **Solo el dueño revela:** el hash incluye la dirección del jugador y `reveal` lo recalcula con `msg.sender`. Así, solo el dueño de la wallet puede revelar su jugada.
 - **El premio va a la wallet que jugó:** se paga a esa misma dirección.
 
 ---
 
-## 4. Despliegue y uso en Sepolia
+## 4. Cómo ejecutarlo
 
-La guía paso a paso está en **[DESPLIEGUE.md](DESPLIEGUE.md)**. Incluye los requisitos, cómo preparar MetaMask y conseguir ETH de Sepolia, el despliegue con el script o con Remix, cómo jugar con la DApp, las capturas para el informe y la solución de problemas.
+Todo se hace en **Remix IDE**. La guía paso a paso está en **[DESPLIEGUE.md](DESPLIEGUE.md)**:
 
-Resumen con el script ([scripts/desplegar.js](scripts/desplegar.js)):
-
-```bash
-npm install
-npx hardhat vars set SEPOLIA_PRIVATE_KEY   # llave de una cuenta SOLO de pruebas, con ETH de Sepolia
-npx hardhat vars set ETHERSCAN_API_KEY     # opcional: publica el código fuente en Etherscan
-npm run desplegar:sepolia                  # revisa el saldo, despliega y guarda despliegues/sepolia.json
-npm run dapp                               # abrir http://localhost:8080/?red=sepolia&contrato=0x…
-```
-
-`vars` guarda la llave fuera del repositorio, pero en texto plano: usa una cuenta que solo tenga ETH de prueba. Si prefieres no exportar la llave privada, también se puede desplegar desde Remix con MetaMask (opción B de la guía).
+1. **Compilar** el contrato en Remix.
+2. **Jugar en Remix VM**, una blockchain simulada en el navegador con cuentas de 100 ETH falsos. Incluye una partida de ejemplo y una tabla de hashes listos para copiar.
+3. **Probar las reglas:** trampas y timeouts.
+4. **Desplegar en Sepolia** para la entrega, desde el mismo Remix con MetaMask. La rúbrica pide el contrato desplegado en una testnet.
 
 **Dirección del contrato en Sepolia:** `0x...` *(completar)*
 
----
-
-## 5. Prototipo: estructura y comandos
+### Archivos
 
 ```
-contracts/
-  Cachipun.sol                 contrato del juego
-  mocks/JugadorMalicioso.sol   jugador-contrato malicioso (solo para tests)
-test/
-  Cachipun.test.js             tests del contrato: reglas, plazos y ataques
-  dapp.test.js                 la DApp y el contrato usan el mismo hash y el mismo ABI
-scripts/desplegar.js           despliegue en el nodo local o en Sepolia
-despliegues/sepolia.json       registro del despliegue en Sepolia (lo crea el script)
-dapp/
-  index.html · estilos.css     interfaz
-  app.js                       lógica de la interfaz: MetaMask, lectura y eventos
-  contrato.js                  ABI, hash y redes (compartido con los tests)
-hardhat.config.js              compilador, red Sepolia y verificación en Etherscan
-DESPLIEGUE.md                  guía de despliegue paso a paso
+contracts/Cachipun.sol   contrato del juego (se abre, compila y despliega en Remix)
+DESPLIEGUE.md            guía paso a paso en Remix
+Rúbrica.pdf              pauta de la evaluación
 ```
-
-Requiere Node.js 20 o superior (probado con 22).
-
-```bash
-npm install          # Hardhat 2, OpenZeppelin 5, ethers 6
-npm test             # 58 tests
-npm run gas          # tests + tabla de gas por función y por despliegue
-npm run coverage     # cobertura: 100 % de líneas, funciones y ramas de Cachipun.sol
-npm run desplegar:sepolia   # despliegue en Sepolia (ver sección 4)
-```
-
-### Probar la DApp sin gastar ETH de testnet
-
-```bash
-npm run nodo              # terminal 1: blockchain local con 20 cuentas de prueba
-npm run desplegar:local   # terminal 2: despliega (plazos de 120 s) e imprime el link de la DApp
-npm run dapp              # terminal 3: sirve la DApp en http://localhost:8080
-```
-
-- **Conectar MetaMask a la red local:** en la DApp, presionar *Conectar*. Ofrece agregar la red **Hardhat local** (`http://127.0.0.1:8545`, chain ID `31337`).
-- **Importar 2 cuentas:** usar 2 de las llaves privadas que imprime `npm run nodo`. Son cuentas públicas de prueba: **nunca** se deben usar en una red real.
-- **Si reinicias el nodo:** borra los datos de actividad de esas cuentas en MetaMask (*Configuración → Avanzado*) para que los nonces vuelvan a cero.
-- **Sin MetaMask:** la DApp abre en **modo espectador** de solo lectura y muestra la partida y los eventos en vivo.
-- **Hay que servirla por http:** abrir `index.html` directo (`file://`) no sirve, porque MetaMask no se inyecta en archivos locales.
-- **Publicarla (opcional):** la carpeta `dapp/` es estática. Se puede publicar en GitHub Pages para que cualquiera la abra sin instalar nada.
 
 ---
 
-## 6. Costos de gas
+## 5. Costos de gas
 
-Medido con Hardhat, Solidity 0.8.28 **sin optimizador** (igual que Remix por defecto), EVM `cancun`. Es el gas total de cada transacción, incluidos los 21.000 de base.
+Solidity 0.8.28 **sin optimizador** y EVM `cancun`, la configuración por defecto de Remix. Es el gas total de cada transacción, incluidos los 21.000 de base. En Remix se ve en la terminal como *transaction cost* y puede variar en unos pocos gas.
 
 | Operación | Gas |
 |-----------|----:|
@@ -276,13 +231,13 @@ Medido con Hardhat, Solidity 0.8.28 **sin optimizador** (igual que Remix por def
 - **Quién paga:** cada transacción la paga quien la envía; el contrato no paga gas.
   - El despliegue lo paga quien despliega.
   - `nuevaPartida()` y `reclamarTimeout()` las paga quien las llame.
-  - En ETH, el costo es gas × precio del gas: a 1 gwei, una partida completa cuesta ≈ 0,00066 ETH entre ambos jugadores. En Sepolia se paga con ETH de faucet.
+  - En ETH, el costo es gas × precio del gas: a 1 gwei, una partida completa cuesta ≈ 0,00066 ETH entre ambos jugadores. En Sepolia se paga con ETH de faucet; en Remix VM, con ETH falso.
 
 ---
 
-## 7. Entregables (según rúbrica)
+## 6. Entregables (según rúbrica)
 
-- [ ] Contrato en Solidity desplegado en testnet
+- [ ] Contrato en Solidity desplegado en testnet (desde Remix con MetaMask)
 - [ ] Informe técnico PDF (8–10 págs., Arial/Calibri 11, interlineado 1.5, APA 7, capturas de despliegue y ejecución)
   - [ ] Flujo de transacciones y seguridad — IE1, IE2
   - [ ] Funcionamiento como DApp y análisis de seguridad — IE4, IE5
@@ -296,4 +251,4 @@ Medido con Hardhat, Solidity 0.8.28 **sin optimizador** (igual que Remix por def
 
 ## Herramientas
 
-Remix IDE · MetaMask · Sepolia · Etherscan · OpenZeppelin · Hardhat · ethers.js
+Remix IDE · MetaMask · Sepolia · Etherscan · OpenZeppelin
